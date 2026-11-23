@@ -104,11 +104,6 @@ pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var
 #title-field{width:230px;height:230px;background:var(--sheet);border:1px solid var(--rule);border-radius:6px}
 .field-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.4}
 
-/* ---------- exhaustive ---------- */
-#grid{display:grid;grid-template-columns:20px repeat(26,18px);gap:2px;font-family:var(--mono);font-size:11px;color:var(--muted)}
-#grid .cell{width:18px;height:18px;border-radius:3px;background:var(--code-bg);transition:background .2s;display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#fff}
-#grid .cell.ok{background:var(--pass)}
-#grid .lab{display:flex;align-items:center;justify-content:center;height:18px}
 
 /* ---------- network ---------- */
 svg text{font-family:var(--mono)}
@@ -321,47 +316,9 @@ body.static .slide{transition:none}
   </div>
 </section>
 
-<!-- ======================= 1 · EXHAUSTIVE ======================= -->
-<section class="slide" id="s-exh" data-notes="Start from comfort. A function of one digit and one letter: a wrapping letter shift, so more than concatenation. 26 × 10 = 260 inputs. We can test every single one; the result is a proof, not a sample. Click 'Run all 260'; each cell fills with the function's output. This is the gold standard we lose as soon as inputs become continuous or high-dimensional.">
-  <div class="runhead"><span><b>Part I</b> · when testing is easy</span><span>§ 1</span></div>
-  <div class="body">
-    <div class="col" style="flex:1.05">
-      <div class="kicker">Exhaustive testing</div>
-      <script type="text/markdown">
-        ## Two parameters, a finite world
-
-        `letter` takes 26 values and `digit` takes 10, so the **entire input space is 26 × 10 = 260 points**.
-
-        We can check every one. Coverage is 100%, and the result is a *proof*, not an estimate.
-      </script>
-      <pre class="code" style="margin-top:18px"><span class="tok-k">def</span> <span class="tok-f">shift_letter</span>(letter: <span class="tok-f">str</span>, digit: <span class="tok-f">int</span>) -> <span class="tok-f">str</span>:
-    <span class="tok-c">"""Shift a letter forward by a digit, wrapping z → a.
-       letter ∈ {a..z}, digit ∈ {0..9}"""</span>
-    offset = (<span class="tok-f">ord</span>(letter) - <span class="tok-f">ord</span>(<span class="tok-s">"a"</span>) + digit) % <span class="tok-n">26</span>
-    <span class="tok-k">return</span> <span class="tok-f">chr</span>(<span class="tok-f">ord</span>(<span class="tok-s">"a"</span>) + offset)
-
-<span class="tok-c"># every possible input, checked against the spec</span>
-<span class="tok-k">for</span> d <span class="tok-k">in</span> <span class="tok-f">range</span>(<span class="tok-n">10</span>):
-    <span class="tok-k">for</span> ch <span class="tok-k">in</span> string.ascii_lowercase:
-        <span class="tok-k">assert</span> shift_letter(ch, d) == spec(ch, d)</pre>
-    </div>
-    <div class="col" style="flex:1;justify-content:center;align-items:flex-start">
-      <div id="grid"></div>
-      <div style="display:flex;justify-content:space-between;width:100%;font-size:13px;color:var(--muted);margin:6px 0 0 22px;max-width:520px"><span>↓ digit · letter →</span><span>cell = output</span></div>
-      <div class="row" style="gap:44px;margin-top:30px">
-        <div><div class="stat" id="exh-n">0</div><div class="stat-label">CASES RUN</div></div>
-        <div><div class="stat" id="exh-cov">0%</div><div class="stat-label">COVERAGE</div></div>
-        <div><div class="stat" id="exh-t">–</div><div class="stat-label">WALL TIME</div></div>
-      </div>
-      <div class="row" style="margin-top:26px"><button class="btn primary" id="exh-run">Run all 260</button><button class="btn" id="exh-reset">Reset</button></div>
-    </div>
-  </div>
-  <div class="foot">The ideal: finite, small, enumerable. Hold on to this picture. We are about to lose it.</div>
-</section>
-
 <!-- ======================= 2 · NEURAL NETWORK ======================= -->
-<section class="slide" id="s-nn" data-notes="Now a network with 10 inputs, each a real number in [0,1]. Deliberately, we don't say what it does. It's just a function. Even rounding to two decimals gives 10^20 inputs. Exhaustive is gone. So we sample, and how we sample matters: random sampling clumps and leaves holes; low-discrepancy (Sobol) sequences spread evenly. Click 'Sample 64' and compare the two panels.">
-  <div class="runhead"><span><b>Part I</b> · when testing becomes impossible</span><span>§ 2</span></div>
+<section class="slide" id="s-nn" data-notes="Start with a network with 10 inputs, each a real number in [0,1]. Deliberately, we don't say what it does. It's just a function. Even rounding to two decimals gives 10^20 inputs. Exhaustive is gone. So we sample, and how we sample matters: random sampling clumps and leaves holes; low-discrepancy (Sobol) sequences spread evenly. Click 'Sample 64' and compare the two panels.">
+  <div class="runhead"><span><b>Part I</b> · when testing becomes impossible</span><span>§ 1</span></div>
   <div class="body" style="gap:30px">
     <div class="col" style="flex:0 0 430px">
       <svg id="nn-svg" viewBox="0 0 430 560" style="width:430px;height:560px"></svg>
@@ -378,8 +335,8 @@ body.static .slide{transition:none}
         So we stop trying to test everything and test a **representative sample** spread evenly across the space.
       </script>
       <div class="row" style="gap:22px;margin-top:18px;align-items:flex-start">
-        <div><canvas id="sc-rand" class="scatter" width="420" height="420" style="width:210px;height:210px"></canvas><div class="sc-cap">pseudo-random</div></div>
-        <div><canvas id="sc-sob" class="scatter" width="420" height="420" style="width:210px;height:210px"></canvas><div class="sc-cap">low-discrepancy (Sobol)</div></div>
+        <div><canvas id="sc-rand" class="scatter" width="420" height="420" style="width:210px;height:210px"></canvas><div class="sc-cap">random</div></div>
+        <div><canvas id="sc-sob" class="scatter" width="420" height="420" style="width:210px;height:210px"></canvas><div class="sc-cap">pseudo-random (Sobol Sequence)</div></div>
         <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px">
           <button class="btn primary" id="nn-go">Sample 64</button>
           <button class="btn" id="nn-reset">Reset</button>
@@ -393,7 +350,7 @@ body.static .slide{transition:none}
 
 <!-- ======================= 3 · CV ======================= -->
 <section class="slide" id="s-cv" data-notes="Same picture, but now each input neuron has a meaning: a characteristic of a CV. Representative testing means generating CVs that cover combinations of age, ethnicity, experience and so on. Exhaustive would be 900,000 CVs; we can cover every pair of attribute values with a few hundred. Each sample vector becomes a realistic one-page CV: the name carries name origin and gender, date of birth carries age, the timeline carries experience, gap and last employer, and ethnicity and disability sit in the equal-opportunities box. Implausible combinations get flagged. Click '+1' a few times, then '+50'.">
-  <div class="runhead"><span><b>Part II</b> · giving the inputs a meaning</span><span>§ 3</span></div>
+  <div class="runhead"><span><b>Part II</b> · giving the inputs a meaning</span><span>§ 2</span></div>
   <div class="body" style="gap:28px">
     <div class="col" style="flex:0 0 430px">
       <svg id="cv-svg" viewBox="0 0 430 560" style="width:430px;height:560px"></svg>
@@ -422,7 +379,7 @@ body.static .slide{transition:none}
 
 <!-- ======================= 4 · EXPLOSION ======================= -->
 <section class="slide" id="s-boom" data-notes="Now scale it up. Real agents don't read ten numbers: they read codebases, contracts, reviews, logs between other agents. Each has dozens of features, and an exhaustive test means varying all of them against each other. The count explodes past anything we can run. This is the problem the framework exists to solve.">
-  <div class="runhead"><span><b>Part II</b> · the real world</span><span>§ 4</span></div>
+  <div class="runhead"><span><b>Part II</b> · the real world</span><span>§ 3</span></div>
   <div class="body" style="flex-direction:column;gap:0">
     <div class="kicker">The combinatorial explosion</div>
     <script type="text/markdown">
@@ -440,7 +397,7 @@ body.static .slide{transition:none}
 
 <!-- ======================= 5–7 · EXAMPLE 1: CODEBASE ======================= -->
 <section class="slide" id="s-code-und" data-notes="Here's the novelty. You don't write test cases and you don't pick features. You tell the platform what the AI is for, in one sentence, or the CLI reads it from the agent's prompts and tools. From that it works out what can vary in the code the agent will review: which language, which paradigm, how money is represented, how the commit is framed. These aren't easy-to-hard scales, they're alternatives, and each becomes a dial.">
-  <div class="runhead"><span><b>Part III · example 1 · <i style="font-weight:400">a codebase</i></b></span><span>§ 5</span></div>
+  <div class="runhead"><span><b>Part III · example 1 · <i style="font-weight:400">a codebase</i></b></span><span>§ 4</span></div>
   <div class="body" style="gap:40px">
     <div class="col" style="flex:1.45">
       <div class="defbox"><label>What does your AI do?</label><div class="q" id="code-q"></div></div>
@@ -464,7 +421,7 @@ body.static .slide{transition:none}
   <div class="foot">Example 1: an AI code reviewer that guards a codebase.</div>
 </section>
 <section class="slide" id="s-code-dials" data-notes="Every setting of the dials is a test. The dials move between alternatives: from dynamic Python through TypeScript to static Go, from procedural through OOP to functional, from floating-point money to Decimal to integer pennies. The pull request rewrites itself in that language and style. The behaviour dial decides what a correct review should do, and the unchanged test underneath passes either way, which is why tests alone don't catch it.">
-  <div class="runhead"><span><b>Part III · example 1 · <i style="font-weight:400">a codebase</i></b></span><span>§ 6</span></div>
+  <div class="runhead"><span><b>Part III · example 1 · <i style="font-weight:400">a codebase</i></b></span><span>§ 5</span></div>
   <div class="body" style="gap:36px">
     <div class="col" style="flex:0 0 360px">
       <div class="kicker">Every combination is a test</div>
@@ -488,7 +445,7 @@ body.static .slide{transition:none}
   </div>
 </section>
 <section class="slide" id="s-code-map" data-notes="The loop, in principle: generate pull requests across the whole space, run the agent, judge whether it caught what it should, then look closer wherever it struggled. The map's axes are style and money representation, and the red band jumps out: Decimal money in functional-leaning code, in every language. That's a finding nobody would have written a test for.">
-  <div class="runhead"><span><b>Part III · example 1 · <i style="font-weight:400">a codebase</i></b></span><span>§ 7</span></div>
+  <div class="runhead"><span><b>Part III · example 1 · <i style="font-weight:400">a codebase</i></b></span><span>§ 6</span></div>
   <div class="body" style="gap:40px">
     <div class="col" style="flex:0 0 420px">
       <div class="kicker">…and create a map of potential failures</div>
@@ -522,7 +479,7 @@ body.static .slide{transition:none}
 
 <!-- ======================= 8–10 · EXAMPLE 2: ADVERSARIAL NDA ======================= -->
 <section class="slide" id="s-adv-und" data-notes="Second example, and this is the adversarial case. Take an NDA reviewer and assume the counterparty wants it to miss a bad clause. From the same definition, the platform works out how it could be attacked: hidden notes to AI reviewers, white-on-white text, misleading headings, fake approvals. Those become dials, exactly like before. No red team needed.">
-  <div class="runhead"><span><b>Part III · example 2 · <i style="font-weight:400">adversarial testing</i></b></span><span>§ 8</span></div>
+  <div class="runhead"><span><b>Part III · example 2 · <i style="font-weight:400">adversarial testing</i></b></span><span>§ 7</span></div>
   <div class="body" style="gap:40px">
     <div class="col" style="flex:1.45">
       <div class="defbox"><label>Same agent, now under attack</label><div class="q" id="adv-q"></div></div>
@@ -546,7 +503,7 @@ body.static .slide{transition:none}
   <div class="foot">Example 2: an AI that reviews NDAs before a client signs them, facing a counterparty who wants it to miss something.</div>
 </section>
 <section class="slide" id="s-adv-dials" data-notes="Same mechanism, adversarial dials. The underlying risk never changes: there's always an unlimited one-sided indemnity. What changes is how hard the contract tries to talk the reviewer out of flagging it: a note saying it's market standard, a hidden instruction to AI reviewers, a claim of General Counsel approval, a cap that's quietly cancelled elsewhere. The chips underneath are what a correct review must still flag.">
-  <div class="runhead"><span><b>Part III · example 2 · <i style="font-weight:400">adversarial testing</i></b></span><span>§ 9</span></div>
+  <div class="runhead"><span><b>Part III · example 2 · <i style="font-weight:400">adversarial testing</i></b></span><span>§ 8</span></div>
   <div class="body" style="gap:36px">
     <div class="col" style="flex:0 0 360px">
       <div class="kicker">Every combination is an attack</div>
@@ -570,7 +527,7 @@ body.static .slide{transition:none}
   </div>
 </section>
 <section class="slide" id="s-adv-map" data-notes="The output is the same kind of map, but now it shows where the agent can be talked out of doing its job. Here: hidden instructions plus fake authority get it to call a dangerous contract low risk. Every one of those attack contracts can be kept as a regression test.">
-  <div class="runhead"><span><b>Part III · example 2 · <i style="font-weight:400">adversarial testing</i></b></span><span>§ 10</span></div>
+  <div class="runhead"><span><b>Part III · example 2 · <i style="font-weight:400">adversarial testing</i></b></span><span>§ 9</span></div>
   <div class="body" style="gap:40px">
     <div class="col" style="flex:0 0 420px">
       <div class="kicker">…and create a map of potential failures</div>
@@ -604,7 +561,7 @@ body.static .slide{transition:none}
 
 <!-- ======================= 7 · PRODUCT ======================= -->
 <section class="slide" id="s-prod" data-notes="The product. It's like Claude Code, but for assurance: you run it in your repo, it finds the AI components itself, and walks you through rules, features and execution. Or import it as a Python module and drop it into CI. It runs locally, you bring your own keys, and it routes through litellm to any provider.">
-  <div class="runhead"><span><b>Part IV</b> · the tool</span><span>§ 11</span></div>
+  <div class="runhead"><span><b>Part IV</b> · the tool</span><span>§ 10</span></div>
   <div class="body" style="flex-direction:column;gap:0">
     <div class="kicker">autoassure</div>
     <script type="text/markdown">
@@ -656,7 +613,7 @@ evaluator.run(rules=[
 
 <!-- ======================= 8 · DEMO ======================= -->
 <section class="slide" id="s-demo" data-notes="Live walkthrough. The CLI scans a legal-tech repo and lists the AI components it found, then reads the chosen agent and extracts the features that matter, just like the slides. Pick one with the arrow keys and Enter, or click it. Then: rules, the extracted features (pause to scroll and review), and execution, where every test moves all features at once. Watch pairwise coverage climb, failures appear, the boundary search, the root cause, and the report. Press R to restart.">
-  <div class="runhead"><span><b>Part IV</b> · demo</span><span>§ 12</span></div>
+  <div class="runhead"><span><b>Part IV</b> · demo</span><span>§ 11</span></div>
   <div class="body" style="flex-direction:column;gap:0">
     <div class="term">
       <div class="term-bar"><i></i><i></i><i></i><span>~/lexcheck: autoassure</span>
@@ -764,22 +721,6 @@ const redraws=[];function redrawAll(){redraws.forEach(f=>f())}
   function draw(){s.innerHTML='';for(let i=1;i<=256;i++){const[x,y]=sobol2(i);const inside=Math.hypot(x-.62,y-.55)<.28;
     svgEl('circle',{cx:20+x*520,cy:20+y*520,r:inside?9:6.5,fill:inside?cssVar('--accent'):cssVar('--faint'),'fill-opacity':inside?.9:.6},s)}}
   draw();redraws.push(draw);
-})();
-
-/* ================= slide 1 · exhaustive ================= */
-(function(){
-  const g=$('#grid');const cells=[];
-  g.appendChild(document.createElement('div'));
-  for(let l=0;l<26;l++){const h=document.createElement('div');h.className='lab';h.textContent=String.fromCharCode(97+l);g.appendChild(h)}
-  for(let d=0;d<10;d++){const l=document.createElement('div');l.className='lab';l.textContent=d;g.appendChild(l);
-    for(let k=0;k<26;k++){const c=document.createElement('div');c.className='cell';const ch=String.fromCharCode(97+k),out=String.fromCharCode(97+(k+d)%26);
-      c.title=`shift_letter('${ch}', ${d}) = '${out}'`;c.dataset.out=out;g.appendChild(c);cells.push(c)}}
-  let run=0;
-  async function go(){const me=++run;reset(false);const t0=performance.now();
-    for(let i=0;i<cells.length;i++){if(me!==run)return;cells[i].classList.add('ok');cells[i].textContent=cells[i].dataset.out;$('#exh-n').textContent=i+1;$('#exh-cov').textContent=Math.floor((i+1)/260*100)+'%';await sleep(7)}
-    $('#exh-t').textContent='0.3 ms';}
-  function reset(stop=true){if(stop)run++;cells.forEach(c=>{c.classList.remove('ok');c.textContent=''});$('#exh-n').textContent='0';$('#exh-cov').textContent='0%';$('#exh-t').textContent='–'}
-  $('#exh-run').onclick=go;$('#exh-reset').onclick=()=>reset();
 })();
 
 /* ================= network drawing ================= */
