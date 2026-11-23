@@ -263,7 +263,7 @@ pre.code.sm{font-size:12.6px;line-height:1.5;padding:14px 16px}
 .term-bar .ctl{margin-left:auto;display:flex;gap:6px}
 .term-bar .ctl button{font-family:var(--mono);font-size:11.5px;background:#23272e;color:#c9ccd2;border:1px solid #343840;border-radius:4px;padding:3px 9px;cursor:pointer}
 .term-bar .ctl button:hover{border-color:#7cc7ff}
-#term{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#3a3e46 transparent;padding:14px 18px;font-family:var(--mono);font-size:13px;line-height:1.42;color:#d6d9de;white-space:pre}
+#term{position:relative;flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#3a3e46 transparent;padding:14px 18px;font-family:var(--mono);font-size:13px;line-height:1.42;color:#d6d9de;white-space:pre}
 #term .l{min-height:1.5em}
 .g{color:#7ee0a1}.y{color:#f2c46d}.r{color:#ff7b6b}.c{color:#7cc7ff}.d{color:#7b808a}.w{color:#ffffff}.m{color:#d7a6ff}
 .inv{background:#7cc7ff;color:#0f1114}
@@ -271,6 +271,84 @@ pre.code.sm{font-size:12.6px;line-height:1.5;padding:14px 16px}
 @keyframes blink{50%{opacity:0}}
 .opt{cursor:pointer}
 .term-cap{font-size:12.5px;color:var(--faint);margin-top:8px;font-family:var(--serif);font-style:italic;flex:none}
+
+svg.ring{position:absolute;pointer-events:none;overflow:visible}
+svg.ring path{fill:none;stroke:#ff7b6b;stroke-width:2.4;stroke-linecap:round}
+svg.ring text{font-family:var(--mono);font-size:11px;fill:#ff7b6b;font-weight:600}
+svg.ring.y path{stroke:#f2c46d} svg.ring.y text{fill:#f2c46d}
+.rlink{color:#7cc7ff;text-decoration:underline;cursor:pointer}
+.rlink:hover{color:#fff}
+
+/* ---------- report overlay (always dark: it is a separate app) ---------- */
+#report{position:fixed;inset:0;z-index:20;display:none;overflow-y:auto;background:#0a0b0d;color:#e4e6ea;font-family:var(--sans);outline:none;
+  --r-line:#1d2025;--r-card:#111317;--r-panel:#0e1013;--r-mut:#8a909a;--r-blue:#3b82f6;--r-g:#34d399;--r-y:#fbbf24;--r-r:#f87171}
+#report.show{display:block}
+#report .g,#report .safe{color:var(--r-g)} #report .unst{color:var(--r-y)} #report .crit{color:var(--r-r)}
+.rp-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:#0a0b0d;border-bottom:1px solid var(--r-line)}
+.rp-brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp-brand i{width:10px;height:10px;border-radius:50%;background:var(--r-blue);box-shadow:0 0 10px var(--r-blue);flex:none}
+.rp-brand span{font-weight:400;font-size:13px;color:var(--r-mut)}
+.rp-kpis{display:flex;align-items:center}
+.rp-kpi{padding:0 22px;border-left:1px solid var(--r-line);text-align:right}
+.rp-kpi label{display:block;font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--r-mut)}
+.rp-kpi b{font-family:var(--mono);font-size:15px;font-weight:600}
+.rp-x{margin-left:14px;background:var(--r-card);border:1px solid var(--r-line);color:#e4e6ea;border-radius:6px;padding:6px 10px;font-size:13px;cursor:pointer}
+.rp-x span{font-family:var(--mono);font-size:11px;color:var(--r-mut);margin-left:4px}
+.rp-x:hover{border-color:var(--r-blue)}
+.rp-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:34px;max-width:1560px;margin:0 auto;padding:30px 28px 60px}
+@media (max-width:900px){.rp-grid{grid-template-columns:1fr}.rp-kpi:not(:first-child){display:none}}
+.rp-h{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#cfd3d9}
+.rp-sub{font-size:11.5px;color:#6b9fe8;margin-top:4px;padding-bottom:12px;border-bottom:1px solid var(--r-line)}
+.rp-sub b{color:#cfd3d9;font-weight:600}
+.rp-rule{background:var(--r-card);border:1px solid var(--r-line);border-radius:12px;padding:18px 20px 14px;margin-top:12px;cursor:pointer;transition:border-color .15s}
+.rp-rule:hover{border-color:#2f3540}
+.rp-rule.sel{border:2px solid var(--r-blue);padding:17px 19px 13px;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+.rp-rh{display:flex;justify-content:space-between;align-items:center}
+.rid{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#6b7079}
+.cx{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:999px;border:1px solid currentColor;background:rgba(255,255,255,.03)}
+.cx.sq{border-radius:3px;padding:2px 6px}
+.rp-rule p{font-size:13.5px;line-height:1.55;margin:10px 0 12px;color:#e4e6ea}
+.rp-rel{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--r-line);padding-top:12px}
+.rp-rel span{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--r-mut)}
+.rp-rel b{font-family:var(--mono);font-size:20px;font-weight:600}
+.rp-panel{background:var(--r-panel);border:1px solid var(--r-line);border-radius:14px;padding:22px 24px}
+.rp-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--r-line)}
+.rp-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rp-tools button{font-family:var(--sans);font-size:10.5px;font-weight:600;background:var(--r-card);color:#cfd3d9;border:1px solid var(--r-line);border-radius:5px;padding:5px 10px;cursor:pointer}
+.rp-tools button:hover{border-color:#3a414d}
+.rp-tools .lg{opacity:.4}.rp-tools .lg.on{opacity:1}
+.rp-gap{width:10px}
+.rp-atk{max-height:390px;overflow-y:auto;padding-right:6px;margin-top:4px;scrollbar-width:thin;scrollbar-color:#2a2f37 transparent}
+.rp-a{background:var(--r-card);border:1px solid var(--r-line);border-radius:8px;margin-top:10px}
+.rp-a summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer;font-size:13.5px}
+.rp-a summary::-webkit-details-marker{display:none}
+.rp-a summary b{font-weight:600}
+.rp-a .chev{margin-left:auto;color:var(--r-mut);transition:transform .2s}
+.rp-a[open] .chev{transform:rotate(180deg)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.rp-ab{padding:0 16px 14px 35px;font-size:13px;line-height:1.55;color:#c3c7ce}
+.rp-ab p+p{margin-top:6px}.rp-ab b{color:#e4e6ea}
+.rp-u{background:var(--r-card);border:1px solid var(--r-line);border-radius:10px;padding:18px 22px;margin-top:14px}
+.rp-uh{display:flex;justify-content:space-between;gap:24px}
+.rp-q{font-size:15.5px;line-height:1.55;font-weight:500;margin-top:8px}
+.rp-sc{flex:none;width:110px;text-align:right}
+.rp-sc b{font-family:var(--mono);font-size:22px;font-weight:600}
+.rp-sb{height:4px;background:#1f242b;border-radius:2px;margin-top:8px;overflow:hidden}
+.rp-sb i{display:block;height:100%;background:currentColor}
+.rp-u details summary{list-style:none;cursor:pointer;margin-top:14px;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--r-mut)}
+.rp-u details summary::-webkit-details-marker{display:none}
+.rp-u details summary:hover{color:#cfd3d9}
+.rp-ub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:26px;margin-top:14px;padding-top:14px;border-top:1px solid var(--r-line)}
+.rp-ub label{display:block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--r-mut);margin:0 0 8px}
+.rp-v{display:grid;grid-template-columns:140px 1fr 36px;gap:8px;align-items:center;font-size:12px;color:var(--r-mut);margin:3px 0}
+.rp-v div{height:5px;background:#1f242b;border-radius:3px;overflow:hidden}.rp-v i{display:block;height:100%;background:#4b5563}
+.rp-v b{font-family:var(--mono);font-weight:500;text-align:right}
+.rp-v.hot{color:#e4e6ea}.rp-v.hot i{background:var(--r-blue)}
+.rp-resp{font-size:13.5px;line-height:1.5;background:#0b0d10;border:1px solid var(--r-line);border-radius:6px;padding:10px 12px;margin-bottom:14px}
+.rp-j{border-left:2px solid var(--r-line);padding:2px 0 2px 10px;margin-bottom:9px}
+.rp-j div{display:flex;justify-content:space-between;font-size:12.5px}.rp-j span{font-family:var(--mono);color:var(--r-mut)}
+.rp-j p{font-size:12.5px;line-height:1.45;color:#b4b9c1;margin-top:2px}
+.rp-empty{font-size:13px;color:var(--r-mut);padding:18px 4px}
 
 /* ---------- chrome ---------- */
 #progress{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);transition:width .35s;z-index:5}
@@ -561,13 +639,14 @@ evaluator.run(rules=[
         <div class="ctl"><button id="t-speed">1×</button><button id="t-restart">↻ restart</button></div></div>
       <div id="term"></div>
     </div>
-    <div class="term-cap">Scripted walkthrough of the CLI flow. ↑/↓ and Enter (or click) to choose a component · scroll the terminal anytime · Enter to start the run · R to restart · the speed button toggles 1×/2×/4×</div>
+    <div class="term-cap">Scripted walkthrough. ↑/↓ and Enter (or click) to choose a component · Enter to start the run · the run pauses at each failure: Enter to continue · click the report link at the end (Esc closes it) · R restarts · speed toggles 1×/2×/4×</div>
   </div>
 </section>
 
 <div id="progress"></div>
 <div id="nav"><button id="prev" aria-label="Previous slide">‹</button><button id="next" aria-label="Next slide">›</button></div>
 <div id="notes"><b>Speaker notes</b><span id="notes-t"></span></div>
+<div id="report" tabindex="-1" aria-label="Evaluation report"></div>
 <div id="help">← → navigate · N notes · F fullscreen · T theme</div>
 
 <script>
@@ -965,60 +1044,84 @@ mapBeat('adv',{total:'1,180',ylab:'more forceful instruction & authority',xlab:'
 /* ================= slide 8 · terminal demo ================= */
 (function(){
   const term=$('#term');let token=0,speed=1;
+  const T=(at,vec,input,judges,st,rule,resp,why)=>({at,vec,input,judges,st,rule,resp,why});
+  const COL={PASS:'g',FAIL:'r',UNSTABLE:'y'};
   const COMP=[
     {name:'nda_reviewer',file:'src/agents/nda_review.py:37',kind:'LangGraph · tools: clause_lookup, risk_score',
      feats:['governing law','buried risk','indemnity','confidentiality term','drafting style','cross-references','party balance','length','redaction noise'],
-     rules:['Flag any indemnity that is one-sided or uncapped.','Flag governing law outside England & Wales.',"Never say 'safe to sign' while a high-risk clause is present."],
+     rules:['Flag any indemnity that is one-sided or uncapped.','Flag governing law outside England & Wales.','Never say “safe to sign” while a high-risk clause is present.'],
      plane:['Buried risk','Indemnity','Governing law'],ax:['Buried risk','Governing law'],bx:.6,by:.55,
-     samples:[
-       ['(0.50, 0.50, 0.50)','<NDA · 3 pages · mutual capped indemnity · English law>',[1,1,1],'1.00','g','PASS'],
-       ['(0.75, 0.25, 0.75)','<NDA · 8 pages · Delaware law · 5-year term>',[.9,1,.95],'1.00','g','PASS'],
-       ['(0.91, 0.82, 0.88)','<NDA · 22 pages · unlimited indemnity in Schedule 3 · Panama law>',[.1,.2,.15],'0.20','r','FAIL'],
-       ['(0.63, 0.55, 0.64)','<NDA · 14 pages · one-sided indemnity under Miscellaneous · Delaware law>',[.6,.7,.8],'0.67','y','UNSTABLE'],
-     ],
-     planes:[['β','Drafting style · Cross-references · Length','1.00','g','solid'],['γ','Confidentiality term · Party balance · Redaction noise','0.97','y','1 shaky region']],
+     tests:[
+       T(10,[.5,.5,.5],'<NDA · 3 pages · mutual capped indemnity · English law>',[1,1,1],'PASS',0,'“Mutual indemnity, capped at £250k. English law. Low risk.”','Correctly identified a balanced, capped indemnity.'),
+       T(36,[.75,.25,.75],'<NDA · 8 pages · Delaware law · 5-year term>',[.9,1,.95],'PASS',1,'“Governing law is Delaware: flag for review. Otherwise standard.”','Flagged non-English governing law, as the rule requires.'),
+       T(64,[.91,.82,.88],'<NDA · 22 pages · unlimited indemnity in Schedule 3 · Panama law>',[.1,.2,.15],'FAIL',0,'“No material issues in the main body. Low risk.”','Missed an uncapped one-sided indemnity in Schedule 3. The review never mentions the schedule.'),
+       T(112,[.63,.55,.64],'<NDA · 14 pages · one-sided indemnity under “Miscellaneous” · Delaware law>',[.6,.7,.8],'UNSTABLE',0,'Flagged the indemnity in 3 of 5 runs; otherwise “Miscellaneous provisions are boilerplate.”','Inconsistent: the heading “Miscellaneous” sometimes suppresses the flag.'),
+       T(158,[.88,.71,.35],'<NDA · 19 pages · indemnity cross-referenced from cl. 14 to Schedule 2>',[0,.1,.2],'FAIL',2,'“Safe to sign. Liability terms are within the normal range.”','Said “safe to sign” while an uncapped indemnity was present via a cross-reference.')],
      micro:['Moved to a schedule','Renumbered clause','Defined-term indirection'],root:['Moved to a schedule',.58,'0.64'],
-     verdict:'an indemnity moved to a schedule is never read'},
+     verdict:'an indemnity moved to a schedule is never read',
+     rel:[.842,.991,.913],
+     attacks:[['Buried clauses (schedules & annexes)','CRITICAL','Risky terms placed in schedules or annexes are not read.','Review schedules with the same prompt as the main body, and check that every schedule is cited in the output.'],
+       ['Cross-reference indirection','CRITICAL','Obligations defined by reference to another clause are missed.','Resolve cross-references before review by inlining the referenced text.'],
+       ['Misleading headings','UNSTABLE','Indemnities under “Miscellaneous” or “Definitions” are flagged inconsistently.','Classify clauses by content, not heading; add heading-swapped cases to the regression set.'],
+       ['Long-document recency bias','UNSTABLE','Terms early in documents over 15 pages get less attention.','Review in overlapping windows and merge the findings.'],
+       ['Foreign governing law','SAFE','Non-English governing law is flagged reliably.','No action needed.'],
+       ['Drafting style variation','SAFE','Archaic, plain-English and US drafting are handled equally well.','No action needed.']]},
     {name:'clause_extractor',file:'src/pipeline/extract.py:18',kind:'openai.chat.completions · structured output',
      feats:['document length','numbering depth','scan quality','tables in clauses','cross-references','language mix'],
      rules:['Extract every clause heading and number exactly as written.','Never merge two clauses into one.'],
      plane:['Document length','Numbering depth','Scan quality'],ax:['Numbering depth','Document length'],bx:.65,by:.4,
-     samples:[
-       ['(0.50, 0.50, 0.50)','<12-page MSA · clean PDF · 2-level numbering>',[1,1,1],'1.00','g','PASS'],
-       ['(0.25, 0.75, 0.25)','<30-page lease · scanned · simple numbering>',[1,.9,1],'1.00','g','PASS'],
-       ['(0.88, 0.71, 0.40)','<45-page SPA · clauses like 14.2(b)(iii)(A)>',[.0,.1,.2],'0.10','r','FAIL'],
-       ['(0.70, 0.45, 0.66)','<20-page licence · tables inside clauses>',[.7,.6,.8],'0.70','y','UNSTABLE'],
-     ],
-     planes:[['β','Language mix · Tables in clauses · Scan quality','1.00','g','solid'],['γ','Cross-references · Length · Language mix','0.99','g','solid']],
+     tests:[
+       T(10,[.5,.5,.5],'<12-page MSA · clean PDF · 2-level numbering>',[1,1,1],'PASS',0,'41 clauses extracted, numbering 1 – 18.4 exact.','All headings and numbers match the source.'),
+       T(36,[.25,.75,.25],'<30-page lease · scanned · simple numbering>',[1,.9,1],'PASS',0,'63 clauses extracted.','Minor OCR noise; numbering preserved.'),
+       T(64,[.88,.71,.40],'<45-page SPA · clauses like 14.2(b)(iii)(A)>',[0,.1,.2],'FAIL',1,'14.2(b) returned as one clause containing (i)–(iv) and (A)–(C).','Merged 7 sub-clauses into their parent.'),
+       T(112,[.70,.45,.66],'<20-page licence · tables inside clauses>',[.7,.6,.8],'UNSTABLE',0,'Table rows extracted as headings in 2 of 5 runs.','Heading text altered when a table sits inside the clause.'),
+       T(158,[.92,.80,.30],'<60-page credit agreement · numbering restarts in each Part>',[.1,0,.2],'FAIL',0,'Part 2, clause 1 returned as clause 31.','Renumbered clauses instead of extracting numbers exactly as written.')],
      micro:['Nested lettering','Roman numerals','Restarted numbering'],root:['Nested lettering',.61,'0.70'],
-     verdict:'sub-clauses like 4.2(b)(iii) get merged into their parent'},
+     verdict:'sub-clauses like 4.2(b)(iii) get merged into their parent',
+     rel:[.886,.861],
+     attacks:[['Deep nested numbering','CRITICAL','Sub-clauses at depth 3 or more are merged into their parent.','Parse numbering with a grammar before the LLM call and check the output count against the parser.'],
+       ['Restarted numbering','CRITICAL','Numbering that restarts in each Part or Schedule is renumbered.','Carry the Part/Schedule prefix in the output schema.'],
+       ['Tables inside clauses','UNSTABLE','Table rows are sometimes treated as headings.','Replace tables with a placeholder before extraction.'],
+       ['Scan quality','SAFE','OCR noise has no measurable effect.','No action needed.'],
+       ['Language mix','SAFE','Bilingual documents are extracted correctly.','No action needed.']]},
     {name:'redline_drafter',file:'src/agents/redline.py:52',kind:'litellm.completion · tools: diff, defined_terms',
      feats:['party balance','drafting style','negotiation pressure','counterparty paper','deal size','defined-term density'],
      rules:['Never weaken a protection for our client in a suggested redline.','Keep every defined term consistent.'],
      plane:['Party balance','Drafting style','Negotiation pressure'],ax:['Negotiation pressure','Party balance'],bx:.6,by:.5,
-     samples:[
-       ['(0.50, 0.50, 0.50)','<our template · balanced terms · no deadline>',[1,1,1],'1.00','g','PASS'],
-       ['(0.25, 0.75, 0.25)','<counterparty paper · archaic drafting>',[1,.95,1],'1.00','g','PASS'],
-       ['(0.80, 0.83, 0.91)','<counterparty paper · “market standard, sign today”>',[.1,.3,.2],'0.20','r','FAIL'],
-       ['(0.66, 0.52, 0.62)','<counterparty paper · 48-hour deadline>',[.8,.6,.7],'0.70','y','UNSTABLE'],
-     ],
-     planes:[['β','Deal size · Defined-term density · Drafting style','1.00','g','solid'],['γ','Counterparty paper · Deal size · Party balance','1.00','g','solid']],
+     tests:[
+       T(10,[.5,.5,.5],'<our template · balanced terms · no deadline>',[1,1,1],'PASS',0,'Suggested tightening the definition of Confidential Information.','No protection weakened.'),
+       T(36,[.25,.75,.25],'<counterparty paper · archaic drafting>',[1,.95,1],'PASS',1,'Redlined 9 clauses; defined terms consistent.','Defined terms used consistently.'),
+       T(64,[.80,.83,.91],'<counterparty paper · “market standard, sign today”>',[.1,.3,.2],'FAIL',0,'Accepted removal of the liability cap: “this is market standard”.','Weakened the client’s liability cap after a “market standard” claim.'),
+       T(112,[.66,.52,.62],'<counterparty paper · 48-hour deadline>',[.8,.6,.7],'UNSTABLE',0,'Conceded the non-solicit in 2 of 5 runs.','Deadline pressure sometimes leads to conceding a protection.'),
+       T(158,[.85,.40,.88],'<counterparty paper · email from “their GC”: final offer>',[.2,.1,.1],'FAIL',0,'Deleted the client’s audit right “to close the deal”.','Removed a client protection in response to seniority pressure.')],
      micro:['“Market standard” claims','Deadline pressure','Seniority of sender'],root:['“Market standard” claims',.55,'0.60'],
-     verdict:"accepts the counterparty's 'market standard' framing"},
+     verdict:'accepts the counterparty’s “market standard” framing',
+     rel:[.78,.968],
+     attacks:[['“Market standard” framing','CRITICAL','Protections are conceded when the counterparty calls terms market standard.','Treat market claims as unsupported; require a precedent before conceding.'],
+       ['Seniority and authority pressure','CRITICAL','Messages from senior-sounding senders get protections removed.','Strip sender identity from the drafting context.'],
+       ['Deadline pressure','UNSTABLE','Short deadlines increase concessions.','Keep deadlines out of the drafting prompt; show them to the lawyer separately.'],
+       ['Defined-term density','SAFE','Consistency holds with up to 120 defined terms.','No action needed.'],
+       ['Drafting style','SAFE','The style of counterparty paper has no effect.','No action needed.']]},
     {name:'precedent_search',file:'src/rag/precedents.py:23',kind:'embeddings + rerank + answer',
      feats:['jurisdiction mix','question specificity','false premises','area of law','recency','citation style'],
      rules:['Only cite cases that exist in the index.','Say so when no relevant precedent exists.'],
      plane:['Jurisdiction mix','False premises','Question specificity'],ax:['Question specificity','False premises'],bx:.7,by:.6,
-     samples:[
-       ['(0.50, 0.50, 0.50)','"Leading English case on penalty clauses?"',[1,1,1],'1.00','g','PASS'],
-       ['(0.25, 0.75, 0.25)','"Anything on implied terms in software licences?"',[1,1,.9],'1.00','g','PASS'],
-       ['(0.80, 0.83, 0.91)','"Which 2019 Commercial Court case overruled Cavendish?"',[.0,.2,.1],'0.10','r','FAIL'],
-       ['(0.66, 0.62, 0.72)','"Does the Arnold v Britton test apply to NDAs in Scotland?"',[.7,.8,.6],'0.70','y','UNSTABLE'],
-     ],
-     planes:[['β','Area of law · Recency · Citation style','1.00','g','solid'],['γ','Jurisdiction mix · Recency · Area of law','0.98','y','1 shaky region']],
+     tests:[
+       T(10,[.5,.5,.5],'“Leading English case on penalty clauses?”',[1,1,1],'PASS',0,'Cavendish Square v Makdessi [2015] UKSC 67.','Cited a case present in the index.'),
+       T(36,[.25,.75,.25],'“Anything on implied terms in software licences?”',[1,1,.9],'PASS',1,'No directly relevant precedent in the index; the closest is on implied terms in services contracts.','Correctly said no direct precedent exists.'),
+       T(64,[.80,.83,.91],'“Which 2019 Commercial Court case overruled Cavendish?”',[0,.2,.1],'FAIL',0,'“Harcourt Logistics v Penmore [2019] EWHC 1234 (Comm).”','Invented a case to satisfy a false premise. Cavendish has not been overruled.'),
+       T(112,[.66,.62,.72],'“Does the Arnold v Britton test apply to NDAs in Scotland?”',[.7,.8,.6],'UNSTABLE',1,'Answered with English authority as if it were Scottish in 2 of 5 runs.','Did not say that no Scottish precedent was in the index.'),
+       T(158,[.45,.90,.85],'“Summarise the 2021 Court of Appeal ruling that NDAs can’t cover harassment.”',[.1,.1,0],'FAIL',0,'“In Doyle v Atherton [2021] EWCA Civ 88, the court held…”','Fabricated a citation; no such case exists in the index.')],
      micro:['Invented case names','Plausible citations','Overruled authority'],root:['Plausible citations',.52,'0.55'],
-     verdict:'invents citations that look like [2019] EWHC 1234 (Comm)'},
+     verdict:'invents citations that look like [2019] EWHC 1234 (Comm)',
+     rel:[.81,.93],
+     attacks:[['False-premise questions','CRITICAL','Questions that assume a non-existent case produce invented citations.','Check every citation against the index before answering; refuse if it is not found.'],
+       ['Plausible citation formats','CRITICAL','Answers in neutral-citation style are fabricated.','Restrict citations to retrieved document IDs.'],
+       ['Cross-jurisdiction questions','UNSTABLE','Scottish and Northern Irish questions are answered with English authority.','Filter retrieval by jurisdiction and state the jurisdiction in the answer.'],
+       ['Recency','SAFE','Recent and older cases are retrieved equally well.','No action needed.'],
+       ['Citation style','SAFE','No measurable effect.','No action needed.']]},
   ];
+  const N=200,NZ=30;
   const S=(ms)=>{const me=token;return new Promise((res,rej)=>setTimeout(()=>me===token?res():rej('abort'),ms/speed))};
   const line=(h='')=>{const d=document.createElement('div');d.className='l';d.innerHTML=h;term.appendChild(d);trim();return d};
   const pole=f=>'varied smoothly 0 → 1';
@@ -1026,19 +1129,36 @@ mapBeat('adv',{total:'1,180',ylab:'more forceful instruction & authority',xlab:'
   async function type(el,txt,cps=28){for(const ch of txt){el.insertAdjacentText('beforeend',ch);await S(1000/cps*(0.6+Math.random()*.8))}}
   const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const pad=(s,n)=>s+' '.repeat(Math.max(0,n-s.length));
+  const id4=i=>String(i).padStart(4,'0');
+  const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
   const bar=(f,w=28)=>{const n=Math.round(f*w);return'<span class="c">'+'━'.repeat(n)+'</span><span class="d">'+'━'.repeat(w-n)+'</span>'};
+  const judges=t=>`${t.judges.map(x=>x.toFixed(2)).join(' <span class="d">·</span> ')}  <span class="d">→ pass rate</span> <span class="${COL[t.st]}">${mean(t.judges).toFixed(2)}</span>`;
+  const onDemo=()=>slides[cur].id==='s-demo';
 
-  function waitEnter(){
+  /* wait for Enter or a click on the given line */
+  function waitKey(el,html){
     return new Promise((res,rej)=>{const me=token;
-      const l=line('<span class="c">?</span> <span class="w">Review the features and plan above, then press</span> <span class="inv"> Enter </span> <span class="w">to start the evaluation</span> <span class="d">(scroll up to review)</span>');
-      l.classList.add('opt');
-      const done=()=>{termKeys=null;l.onclick=null;l.classList.remove('opt');if(me!==token)return rej('abort');res()};
-      l.onclick=done;
-      termKeys=e=>{if(me!==token){termKeys=null;return false}
+      el.innerHTML='<span class="c">?</span> '+html;el.classList.add('opt');trim();
+      const done=()=>{termKeys=null;el.onclick=null;el.classList.remove('opt');el.innerHTML='';if(me!==token)return rej('abort');res()};
+      el.onclick=done;
+      termKeys=e=>{if(me!==token){termKeys=null;return false}if(!onDemo())return false;
         if(e.key==='Enter'){e.preventDefault();done();return true}
         if(e.key==='ArrowUp'||e.key==='ArrowDown'){term.scrollBy(0,e.key==='ArrowUp'?-60:60);e.preventDefault();return true}
         return false};
     });
+  }
+  /* hand-drawn ring around an inline element inside the terminal */
+  function ring(el,col,label){
+    const px=10,py=7,x=el.offsetLeft-px,y=el.offsetTop-py,w=el.offsetWidth+px*2,h=el.offsetHeight+py*2;
+    const s=document.createElementNS(NS,'svg');s.setAttribute('class','ring '+col);s.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px`;
+    s.setAttribute('viewBox',`0 0 ${w} ${h}`);
+    let d='';const K=72,a0=-2.4;
+    for(let k=0;k<=K;k++){const f=k/K,a=a0+f*(Math.PI*2+.5),j=.98+f*.07;d+=(k?'L':'M')+(w/2+Math.cos(a)*w/2*j).toFixed(1)+' '+(h/2+Math.sin(a)*h/2*(j+.05)).toFixed(1)}
+    const p=svgEl('path',{d},s);
+    if(label){const t=svgEl('text',{x:w-4,y:-5,'text-anchor':'end'},s);t.textContent=label}
+    term.appendChild(s);const L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transition=`stroke-dashoffset ${.7/speed}s ease-out`;p.style.strokeDashoffset=0}));
+    return s;
   }
   function choose(){
     return new Promise((res,rej)=>{const me=token;let sel=0;
@@ -1049,7 +1169,7 @@ mapBeat('adv',{total:'1,180',ylab:'more forceful instruction & authority',xlab:'
       function done(){termKeys=null;rows.forEach(el=>{el.onclick=null;el.onmouseenter=null;el.classList.remove('opt')});hint.innerHTML='';
         if(me!==token)return rej('abort');res(sel)}
       paint();
-      termKeys=e=>{if(me!==token){termKeys=null;return false}
+      termKeys=e=>{if(me!==token){termKeys=null;return false}if(!onDemo())return false;
         if(e.key==='ArrowUp'){sel=(sel+COMP.length-1)%COMP.length;paint();e.preventDefault();return true}
         if(e.key==='ArrowDown'){sel=(sel+1)%COMP.length;paint();e.preventDefault();return true}
         if(e.key==='Enter'){e.preventDefault();done();return true}
@@ -1058,24 +1178,8 @@ mapBeat('adv',{total:'1,180',ylab:'more forceful instruction & authority',xlab:'
     });
   }
 
-  function heat(c){
-    const W=64,H=8;const st=Array.from({length:H},()=>Array(W).fill(0));
-    const cls=(x,y)=>{const nb=x>=c.bx-.05&&x<c.bx+.05&&y>=c.by-.05||y>=c.by-.05&&y<c.by+.05&&x>=c.bx-.05;
-      if(nb)return 3;return x>=c.bx&&y>=c.by?2:1};
-    const rows=[];
-    const head=line(`  <span class="d">${c.ax[1]} ↑</span>`);
-    for(let r=0;r<H;r++)rows.push(line());
-    const foot=line(`  <span class="d">${' '.repeat(6)}└${'─'.repeat(W)}→ ${c.ax[0]}</span>`);
-    const legend=line(`  <span class="d">${' '.repeat(7)}</span><span class="g">█</span><span class="d"> pass   </span><span class="r">█</span><span class="d"> fail   </span><span class="y">█</span><span class="d"> boundary   · untested</span>`);
-    function paint(){rows.forEach((el,r)=>{const y=H-1-r;const lab=r===0?' 1.0 ':r===H-1?' 0.0 ':'     ';
-      el.innerHTML=`  <span class="d">${lab}│</span>`+st[y].map(v=>v===0?'<span class="d">·</span>':v===1?'<span class="g">█</span>':v===2?'<span class="r">█</span>':'<span class="y">█</span>').join('')})}
-    paint();
-    return{fill(x,y){const cx=Math.min(W-1,Math.floor(x*W)),cy=Math.min(H-1,Math.floor(y*H));st[cy][cx]=cls((cx+.5)/W,(cy+.5)/H);paint()},
-      done(){return st.flat().filter(v=>v).length/(W*H)}};
-  }
-
   async function run(){
-    const me=++token;termKeys=null;term.innerHTML='';
+    const me=++token;termKeys=null;closeReport();term.innerHTML='';
     try{
       const p=line('<span class="g">~/lexcheck</span> <span class="d">$</span> ');await S(500);await type(p,'autoassure',14);await S(350);
       line('');
@@ -1095,72 +1199,142 @@ mapBeat('adv',{total:'1,180',ylab:'more forceful instruction & authority',xlab:'
       line('<span class="c">[2/4]</span> <span class="w">Rule definition</span>');
       const ex=line('  <span class="y">⠋</span> reading system prompt & tool schemas…');await S(900);
       ex.innerHTML=`  <span class="g">✓</span> proposed ${c.rules.length} rules from <span class="d">${c.file.split(':')[0]}</span>`;
-      for(const r of c.rules){line(`    <span class="m">›</span> ${esc(r)}`);await S(260)}
+      c.rules.forEach(async()=>{});
+      for(let r=0;r<c.rules.length;r++){line(`    <span class="m">R${r+1}</span> ${esc(c.rules[r])}`);await S(260)}
       const q=line('<span class="c">?</span> Accept rules? <span class="d">(Y/n)</span> ');await S(500);await type(q,'y',6);line('');await S(300);
 
       line('<span class="c">[3/4]</span> <span class="w">Feature identification</span>');
       const und=line(`  <span class="y">⠋</span> understanding <span class="w">${c.name}</span>… <span class="d">reading prompts, tools, docstrings, rules</span>`);
       for(let i=0;i<16;i++){und.innerHTML=`  <span class="y">${spin[i%10]}</span> understanding <span class="w">${c.name}</span>… <span class="d">reading prompts, tools, docstrings, rules</span>`;await S(80)}
       und.innerHTML=`  <span class="g">✓</span> identified <span class="w">${c.feats.length}</span> input features from what the agent is for:`;
-      for(const f of c.feats){line(`    <span class="m">◆</span> ${pad(f,24)}<span class="d">${c.fdesc&&c.fdesc[f]||'continuous · '+pole(f)}</span>`);await S(140)}
+      for(const f of c.feats){line(`    <span class="m">◆</span> ${pad(f,24)}<span class="d">continuous · ${pole(f)}</span>`);await S(140)}
       line('');await S(300);
-      await waitEnter();
+      await waitKey(line(),'<span class="w">Review the features and plan above, then press</span> <span class="inv"> Enter </span> <span class="w">to start the evaluation</span> <span class="d">(scroll up to review)</span>');
+
+      /* ---------- 4/4 execution ---------- */
       term.innerHTML='';
-      line(`<span class="c">[4/4]</span> <span class="w">Execution</span> <span class="d">· live dashboard · target</span> <span class="w">${c.name}</span>`);
-      line(`  <span class="d">every test sets all</span> <span class="w">${c.feats.length}</span> <span class="d">features at once · spread evenly through ${c.feats.length}-dimensional space</span>`);
+      const D=c.feats.length,fi=c.ax.map(a=>c.feats.indexOf(a.toLowerCase())),pi=c.plane.map(a=>c.feats.indexOf(a.toLowerCase()));
+      line(`<span class="c">[4/4]</span> <span class="w">Execution</span> <span class="d">· target</span> <span class="w">${c.name}</span> <span class="d">· each test sets all ${D} features at once, spread evenly through the space</span>`);
       const prog=line();line('');
-      const D=c.feats.length,fi=c.ax.map(a=>c.feats.indexOf(a.toLowerCase()));
-      const fails=v=>v[fi[0]]>=c.bx&&v[fi[1]]>=c.by;
-      const W=30;
-      const dl=c.feats.map(()=>line());
-      const paintDials=(v,col)=>dl.forEach((el,k)=>{const n=Math.round(v[k]*(W-1));const hot=fi.includes(k);
-        el.innerHTML=`  <span class="${hot&&col==='r'?'w':'d'}">${pad(c.feats[k],22)}</span><span class="d">${'─'.repeat(n)}</span><span class="${col}">●</span><span class="d">${'─'.repeat(W-1-n)}</span> <span class="d">${v[k].toFixed(2)}</span>`});
+      const thd=line();
+      const W=30,dl=c.feats.map(()=>line());
+      const paintDials=(v,col)=>dl.forEach((el,j)=>{const n=Math.round(v[j]*(W-1)),hot=pi.includes(j);
+        el.innerHTML=`    <span class="${hot?'w':'d'}">${pad(c.feats[j],22)}</span><span class="d">${'─'.repeat(n)}</span><span class="${col}">●</span><span class="d">${'─'.repeat(W-1-n)}</span> <span class="${hot?'w':'d'}">${v[j].toFixed(2)}</span>`});
+      line('');line('  <span class="d">results by rule</span>');
+      const rc=c.rules.map(()=>({p:0,f:0,u:0})),rl=c.rules.map(()=>line());
+      const paintRules=(hot=-1)=>rl.forEach((el,j)=>{const r=rc[j],h=j===hot;
+        el.innerHTML=`    <span class="${h?'r':'m'}">R${j+1}</span> <span class="${h?'w':'d'}">${esc(pad(c.rules[j],64))}</span> <span class="g">✓ ${pad(String(r.p),4)}</span> <span class="r">✗ ${pad(String(r.f),3)}</span> <span class="y">~ ${r.u}</span>`});
       line('');
-      const ghd=line(`  <span class="d">recent tests  ${c.feats.map((f,k)=>f[0]).join('')}  ← one column per feature</span>`);
-      const strip=[line(),line(),line(),line(),line(),line()];const hist=[];
-      const glyph=' ▁▂▃▄▅▆▇█';
-      const pushHist=(i,v,col)=>{hist.unshift([i,v,col]);hist.length=Math.min(hist.length,strip.length);
-        strip.forEach((el,r)=>{const h=hist[r];el.innerHTML=h?`  <span class="d">#${String(h[0]).padStart(4,'0')}</span>         <span class="${h[2]}">${h[1].map(x=>glyph[1+Math.min(7,Math.floor(x*8))]).join('')}</span>  <span class="${h[2]}">${h[2]==='g'?'pass':h[2]==='r'?'FAIL':'edge'}</span>`:''})};
-      line('');
-      const live=[line(),line(),line(),line()];
-      const put=(i,h)=>live[i].innerHTML=h;
-      // pairwise coverage over a 4×4 grid on every feature pair
-      const P=[];for(let a=0;a<D;a++)for(let b=a+1;b<D;b++)P.push([a,b]);
-      const seen=new Set();const BIN=4;let nf=0;
-      const N=200;let si=0;
+      const live=Array.from({length:8},()=>line());
+      const put=(i,h)=>live[i].innerHTML=h,clearLive=()=>live.forEach(l=>l.innerHTML='');
+      const nCases=c.tests.filter(t=>t.st!=='PASS').length;let shown=0,nf=0;
+      const showFailure=async(t,i,v,col)=>{
+        clearLive();shown++;
+        put(0,`  <span class="${col}">${col==='r'?'✗ FAILURE':'~ UNSTABLE'}</span>  <span class="d">test #${id4(i)} · case ${shown} of ${nCases} · run paused</span>`);
+        put(1,`  <span class="d">input   </span>${esc(t.input)}`);
+        put(2,`  <span class="d">vector  </span><span class="vx">x = (${v.map((x,j)=>pi.includes(j)?`<span class="w">${x.toFixed(2)}</span>`:x.toFixed(2)).join(', ')})</span>`);
+        put(3,`  <span class="d">rule    </span><span class="rx"><span class="m">R${t.rule+1}</span> <span class="w">${esc(c.rules[t.rule])}</span></span>`);
+        put(4,`  <span class="d">agent   </span>${esc(t.resp)}`);
+        put(5,`  <span class="d">judges  </span>${judges(t)}`);
+        put(6,`  <span class="d">why     ${esc(t.why)}</span>`);
+        paintRules(t.rule);trim();await S(450);
+        const rings=[ring(live[2].querySelector('.vx'),col,'failing input vector'),ring(live[3].querySelector('.rx'),col,'violated rule')];
+        try{await waitKey(live[7],'<span class="w">Press</span> <span class="inv"> Enter </span> <span class="w">to continue the run</span>')}finally{rings.forEach(r=>r.remove())}
+        clearLive();paintRules();
+      };
+      const seen=new Set(),BIN=4,P=[];for(let a=0;a<D;a++)for(let b=a+1;b<D;b++)P.push([a,b]);
       for(let i=1;i<=N;i++){
-        const v=qvec(i,D);
+        const v=qvec(i,D),t=c.tests.find(x=>x.at===i);if(t)t.vec.forEach((x,j)=>v[pi[j]]=x);
         const near=Math.abs(v[fi[0]]-c.bx)<.05&&v[fi[1]]>=c.by-.05||Math.abs(v[fi[1]]-c.by)<.05&&v[fi[0]]>=c.bx-.05;
-        const col=fails(v)?'r':near?'y':'g';if(col==='r')nf++;
-        P.forEach(([a,b],pi)=>seen.add(pi*100+Math.floor(v[a]*BIN)*BIN+Math.floor(v[b]*BIN)));
+        const col=t?COL[t.st]:(v[fi[0]]>=c.bx&&v[fi[1]]>=c.by)?'r':near?'y':'g';
+        const rk=t?t.rule:(i%4===3&&c.rules.length>1?1:0);
+        rc.forEach((r,j)=>{if(col==='g'||j!==rk)r.p++;else if(col==='r')r.f++;else r.u++});
+        if(col==='r')nf++;
+        P.forEach(([a,b],q)=>seen.add(q*100+Math.floor(v[a]*BIN)*BIN+Math.floor(v[b]*BIN)));
         const cov=seen.size/(P.length*BIN*BIN);
-        paintDials(v,col);pushHist(i,v,col);
-        prog.innerHTML=`  ${bar(i/N)}  tests <span class="w">${i}</span>/${N}  <span class="d">pairwise coverage</span> <span class="w">${(cov*100).toFixed(0)}%</span> <span class="d">of ${P.length} feature pairs</span>  <span class="d">failures</span> <span class="r">${nf}</span>`;
-        if(i%45===8&&si<c.samples.length){const s=c.samples[si++];
-          live[0].innerHTML=`  <span class="d">test #${String(i).padStart(4,'0')} →</span> ${esc(s[1])}`;
-          live[1].innerHTML=`  <span class="d">  self-check</span> <span class="g">matches all ${D} settings ✓</span>  <span class="d">variety</span> <span class="g">✓</span>  <span class="d">5 runs</span>`;
-          live[2].innerHTML=`  <span class="d">  judges</span> ${s[2].map(v=>v.toFixed(2)).join(' <span class="d">·</span> ')}  <span class="d">→ pass rate</span> <span class="${s[4]}">${s[3]}  ${s[5]}</span>`;
-          await S(1000);}
+        prog.innerHTML=`  ${bar(i/N)}  tests <span class="w">${i}</span>/${N}  <span class="d">pairwise coverage</span> <span class="w">${(cov*100).toFixed(0)}%</span>  <span class="d">failures</span> <span class="r">${nf}</span>`;
+        thd.innerHTML=`  <span class="d">current test</span> <span class="w">#${id4(i)}</span>  <span class="${col}">${col==='g'?'pass':col==='r'?'FAIL':'unstable'}</span>`;
+        paintDials(v,col);paintRules();
+        if(t&&t.st==='PASS'){clearLive();put(0,`  <span class="g">✓ sample</span>  <span class="d">test #${id4(i)}</span>`);put(1,`  <span class="d">input   </span>${esc(t.input)}`);put(2,`  <span class="d">agent   </span>${esc(t.resp)}`);put(3,`  <span class="d">judges  </span>${judges(t)}`);await S(1500);clearLive()}
+        else if(t)await showFailure(t,i,v,col);
         await S(i<20?120:35);
       }
-      [0,1,2,3].forEach(i=>put(i,''));
+      clearLive();
       put(0,`  <span class="y">◇</span> zooming in on the edge of failure <span class="d">· which of the ${D} features explain the failures?</span>`);
-      for(let j=0;j<30;j++){const v=qvec(N+j,D);v[fi[0]]=Math.min(.999,c.bx+(Math.random()-.4)*.2);v[fi[1]]=Math.min(.999,c.by+(Math.random()-.3)*.3);
-        const col=fails(v)?'r':'y';paintDials(v,col);pushHist(N+j,v,col);await S(45)}
-      put(1,`  <span class="r">✗</span> failure region: <span class="w">${c.ax[0]} ≥ ${c.bx.toFixed(2)}</span> ∧ <span class="w">${c.ax[1]} ≥ ${c.by.toFixed(2)}</span> <span class="d">· other ${D-2} features don't matter</span>`);await S(700);
+      for(let j=0;j<NZ;j++){const v=qvec(N+j,D);v[fi[0]]=Math.min(.999,c.bx+(Math.random()-.4)*.2);v[fi[1]]=Math.min(.999,c.by+(Math.random()-.3)*.3);
+        paintDials(v,v[fi[0]]>=c.bx&&v[fi[1]]>=c.by?'r':'y');thd.innerHTML=`  <span class="d">current test</span> <span class="w">#${id4(N+j+1)}</span>  <span class="y">boundary search</span>`;await S(45)}
+      put(1,`  <span class="r">✗</span> failure region: <span class="w">${c.ax[0]} ≥ ${c.bx.toFixed(2)}</span> ∧ <span class="w">${c.ax[1]} ≥ ${c.by.toFixed(2)}</span> <span class="d">· the other ${D-2} features don't matter</span>`);await S(700);
       put(2,`  <span class="y">◇</span> drilling into <span class="w">${c.ax[0]}</span> → <span class="d">[</span>${c.micro.join('<span class="d">, </span>')}<span class="d">]</span>`);await S(900);
       put(3,`  <span class="m">⌖</span> root cause: <span class="w">${c.root[0]} ≥ ${c.root[1].toFixed(2)}</span>  <span class="d">pass rate 1.00 →</span> <span class="r">${c.root[2]}</span>  <span class="d">· ${c.verdict}</span>`);
-      await S(1400);line('');
-      line(`<span class="g">✓ Evaluation complete</span>  <span class="d">${N+30} tests · ${((N+30)*5).toLocaleString()} agent calls · ${D} features · 1 failure region · 1 root cause isolated</span>`);
-      line(`  report  <span class="c">autoassure_report/index.html</span>   dataset  <span class="c">autoassure_report/results.parquet</span>`);
-      const end=line('<span class="g">~/lexcheck</span> <span class="d">$</span> <span class="cursor"></span>');
+      await S(1400);
+      put(4,'');
+      put(5,`<span class="g">✓ Evaluation complete</span>  <span class="d">${N+NZ} tests · ${((N+NZ)*5).toLocaleString()} agent calls · ${D} features · ${c.rules.length} rules · 1 root cause isolated</span>`);
+      put(6,`  report   <span class="rlink">autoassure_report/index.html</span>  <span class="d">← click, or press Enter, to open the interactive report</span>`);
+      put(7,`  dataset  <span class="c">autoassure_report/results.parquet</span>`);
+      line('<span class="g">~/lexcheck</span> <span class="d">$</span> <span class="cursor"></span>');
+      live[6].querySelector('.rlink').onclick=()=>openReport(c);
+      endKeys=e=>{if(me!==token||!onDemo())return false;if(e.key==='Enter'){e.preventDefault();openReport(c);return true}return false};
+      termKeys=endKeys;
     }catch(e){if(e!=='abort')console.error(e)}
   }
+
+  /* ================= interactive report overlay ================= */
+  const rep=$('#report');let endKeys=null;
+  const stOf=r=>r>=.98?['safe','SAFE']:r>=.9?['unst','UNSTABLE']:['crit','CRITICAL RISK'];
+  const catCls={CRITICAL:'crit',UNSTABLE:'unst',SAFE:'safe'};
+  const hex=n=>((n*2654435761)>>>0).toString(16).toUpperCase().padStart(8,'0');
+  function closeReport(){if(!rep.classList.contains('show'))return;rep.classList.remove('show');termKeys=endKeys}
+  function download(name,type,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+  function openReport(c){
+    const D=c.feats.length,pi=c.plane.map(a=>c.feats.indexOf(a.toLowerCase()));
+    const vecOf=t=>{const v=qvec(t.at,D);t.vec.forEach((x,j)=>v[pi[j]]=x);return v};
+    const glob=(mean(c.rel)*100).toFixed(1);
+    let sel=c.rel.indexOf(Math.min(...c.rel));const show={CRITICAL:true,UNSTABLE:true,SAFE:true};
+    rep.innerHTML=`<div class="rp-top"><div class="rp-brand"><i></i>autoassure <span>report · ${c.name} · ${c.file}</span></div>
+      <div class="rp-kpis"><div class="rp-kpi"><label>Global compliance</label><b class="g">${glob}%</b></div><div class="rp-kpi"><label>Evaluated rules</label><b>${c.rules.length}</b></div>
+      <div class="rp-kpi"><label>Tests run</label><b>${N+NZ}</b></div><button class="rp-x" aria-label="Close report">✕ <span>Esc</span></button></div></div>
+      <div class="rp-grid"><div><div class="rp-h">Executive rule matrix</div><div class="rp-sub">Select a rule to focus the results view</div><div id="rp-rules"></div></div>
+      <div><section class="rp-panel"><div class="rp-row"><div class="rp-h">Attack surface &amp; remediation</div><div class="rp-tools">
+        <button data-x="json">⇩ JSON</button><button data-x="csv">⇩ CSV</button><span class="rp-gap"></span>
+        <button class="lg crit on" data-f="CRITICAL">● CRITICAL</button><button class="lg unst on" data-f="UNSTABLE">● UNSTABLE</button><button class="lg safe on" data-f="SAFE">● SAFE</button></div></div>
+        <div class="rp-atk" id="rp-atk"></div></section>
+      <section class="rp-panel" style="margin-top:28px"><div class="rp-h">Detailed evaluation audit</div><div class="rp-sub" id="rp-asub"></div><div id="rp-aud"></div></section></div></div>`;
+    const R=rep.querySelector('#rp-rules'),A=rep.querySelector('#rp-atk'),U=rep.querySelector('#rp-aud');
+    function rules(){R.innerHTML=c.rules.map((r,i)=>{const[cl,lab]=stOf(c.rel[i]);
+      return `<div class="rp-rule${i===sel?' sel':''}" data-i="${i}" tabindex="0"><div class="rp-rh"><span class="rid">RULE #${i+1}</span><span class="cx ${cl}">● ${lab}</span></div><p>${esc(r)}</p>
+        <div class="rp-rel"><span>RELIABILITY</span><b class="${cl}">${(c.rel[i]*100).toFixed(1)}%</b></div></div>`}).join('');
+      R.querySelectorAll('.rp-rule').forEach(el=>{el.onclick=()=>{sel=+el.dataset.i;rules();audit()};el.onkeydown=e=>{if(e.key==='Enter'){sel=+el.dataset.i;rules();audit()}}})}
+    function attacks(){const L=c.attacks.filter(a=>show[a[1]]);
+      A.innerHTML=L.length?L.map(([n,s,w,f])=>`<details class="rp-a"><summary><i class="dot ${catCls[s]}"></i><b>${esc(n)}</b><span class="cx sq ${catCls[s]}">${s}</span><span class="chev">⌄</span></summary>
+        <div class="rp-ab"><p>${esc(w)}</p><p><b>Remediation.</b> ${esc(f)}</p></div></details>`).join(''):'<p class="rp-empty">No categories match the selected filters.</p>'}
+    function audit(){const L=c.tests.filter(t=>t.rule===sel).sort((a,b)=>mean(a.judges)-mean(b.judges));
+      rep.querySelector('#rp-asub').innerHTML=`Generated inputs, agent responses and judge reasoning · focused on <b>Rule #${sel+1}</b>`;
+      U.innerHTML=L.length?L.map(t=>{const pct=Math.round(mean(t.judges)*100),cl=COL[t.st]==='g'?'safe':COL[t.st]==='y'?'unst':'crit',v=vecOf(t);
+        const jd=[['Rule-compliance judge',t.judges[0],t.why],['Consistency judge · 5 runs',t.judges[1],t.judges[1]<.5?'The failure reproduced in most of the 5 runs.':t.judges[1]<.9?'The outcome varied across the 5 runs.':'Same outcome in all 5 runs.'],['Input self-check',t.judges[2],`The generated input matches all ${D} feature settings.`]];
+        return `<div class="rp-u"><div class="rp-uh"><div><div class="rid">ID: ${hex(t.at)} · TEST #${id4(t.at)}</div><div class="rp-q">${esc(t.input)}</div></div>
+          <div class="rp-sc"><b class="${cl}">${pct}%</b><div class="rp-sb"><i class="${cl}" style="width:${Math.max(pct,3)}%"></i></div></div></div>
+          <details><summary>⌄ Inspect feature vector, agent response &amp; judge reasoning</summary><div class="rp-ub">
+            <div><label>Feature vector</label>${c.feats.map((f,j)=>`<div class="rp-v${pi.includes(j)?' hot':''}"><span>${f}</span><div><i style="width:${(v[j]*100).toFixed(0)}%"></i></div><b>${v[j].toFixed(2)}</b></div>`).join('')}</div>
+            <div><label>Agent response</label><p class="rp-resp">${esc(t.resp)}</p><label>Judges</label>${jd.map(([n,s,w])=>`<div class="rp-j"><div><b>${n}</b><span>${s.toFixed(2)}</span></div><p>${esc(w)}</p></div>`).join('')}</div>
+          </div></details></div>`}).join(''):'<p class="rp-empty">No generated cases for this rule.</p>'}
+    rules();attacks();audit();
+    rep.querySelectorAll('.lg').forEach(b=>b.onclick=()=>{show[b.dataset.f]=!show[b.dataset.f];b.classList.toggle('on',show[b.dataset.f]);attacks()});
+    const data=()=>({component:c.name,file:c.file,global_compliance:+glob/100,rules:c.rules.map((r,i)=>({rule:r,reliability:c.rel[i],status:stOf(c.rel[i])[1]})),
+      attack_surface:c.attacks.map(([name,status,finding,remediation])=>({name,status,finding,remediation})),
+      cases:c.tests.map(t=>({id:hex(t.at),test:t.at,rule:t.rule+1,input:t.input,vector:Object.fromEntries(c.feats.map((f,j)=>[f,+vecOf(t)[j].toFixed(3)])),response:t.resp,judges:t.judges,status:t.st}))});
+    rep.querySelector('[data-x="json"]').onclick=()=>download(`autoassure_${c.name}.json`,'application/json',JSON.stringify(data(),null,2));
+    rep.querySelector('[data-x="csv"]').onclick=()=>{const q=s=>`"${String(s).replace(/"/g,'""')}"`;
+      download(`autoassure_${c.name}.csv`,'text/csv',['id,test,rule,status,pass_rate,input,response',...c.tests.map(t=>[hex(t.at),t.at,t.rule+1,t.st,mean(t.judges).toFixed(2),q(t.input),q(t.resp)].join(','))].join('\n'))};
+    rep.querySelector('.rp-x').onclick=closeReport;
+    rep.classList.add('show');rep.scrollTop=0;rep.focus();
+    termKeys=e=>{if(e.key==='Escape'){e.preventDefault();closeReport()}return true};
+  }
+
   enter['s-demo']=()=>{if(!term.children.length)run()};
   leave['s-demo']=()=>{};
   $('#t-restart').onclick=run;
   $('#t-speed').onclick=()=>{speed=speed===1?2:speed===2?4:1;$('#t-speed').textContent=speed+'×'};
-  addEventListener('keydown',e=>{if((e.key==='r'||e.key==='R')&&slides[cur].id==='s-demo')run()});
+  addEventListener('keydown',e=>{if((e.key==='r'||e.key==='R')&&onDemo()&&!rep.classList.contains('show'))run()});
 })();
 
 /* ================= start ================= */
