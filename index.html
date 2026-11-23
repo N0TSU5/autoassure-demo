@@ -79,12 +79,30 @@ pre.code{font-family:var(--mono);font-size:14.5px;line-height:1.6;background:var
 .chip{display:inline-block;font-size:12.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--rule);background:var(--card);margin:0 5px 6px 0;white-space:nowrap}
 
 /* ---------- title ---------- */
-#s-title .body{flex-direction:column;justify-content:center;position:relative}
-#title-field{position:absolute;right:-40px;top:-10px;width:560px;height:560px;opacity:.9}
-#s-title .md h1{max-width:12ch}
-#s-title .sub{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--muted);margin-top:18px;max-width:30ch}
-#s-title .meta{margin-top:44px;font-size:15px;color:var(--muted);display:flex;gap:28px}
-#s-title .meta span b{color:var(--ink);font-weight:500}
+#s-exec .body{gap:48px;align-items:stretch}
+#s-exec .md h1{font-size:52px;max-width:15ch}
+#s-exec .lead{font-family:var(--serif);font-style:italic;font-size:24px;line-height:1.35;color:var(--muted);margin-top:16px;max-width:30ch}
+#s-exec .lead b{font-style:normal;font-weight:500;color:var(--ink)}
+.pts{margin-top:26px;display:flex;flex-direction:column}
+.pts>div{display:grid;grid-template-columns:34px 1fr;gap:0 4px;padding:12px 0;border-top:1px solid var(--rule)}
+.pts>div:last-child{border-bottom:1px solid var(--rule)}
+.pts .n{font-family:var(--mono);font-size:13px;color:var(--accent);padding-top:3px}
+.pts b{display:block;font-size:17px;font-weight:600;margin-bottom:2px}
+.pts p{font-size:15.5px;line-height:1.45;color:var(--ink);opacity:.86}
+.pts .chip{margin:6px 6px 0 0}
+#s-exec .meta{margin-top:auto;padding-top:18px;font-size:14px;color:var(--muted);display:flex;gap:26px}
+#s-exec .meta span b{color:var(--ink);font-weight:500}
+.diff{flex:1;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--accent);border-radius:8px;padding:22px 26px 20px}
+.diff h3{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.12;margin-bottom:10px}
+.diff>p{font-size:15.5px;line-height:1.5;color:var(--muted)}
+.diff-row{display:flex;gap:24px;margin-top:20px;flex:1;min-height:0;align-items:center}
+.props3{flex:1;display:flex;flex-direction:column;gap:20px}
+.props3 div{padding-left:14px;border-left:2px solid var(--accent-soft)}
+.props3 b{display:block;font-size:17px;font-weight:600;color:var(--accent);margin-bottom:2px}
+.props3 span{font-size:15px;line-height:1.45}
+.field-wrap{flex:0 0 230px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#title-field{width:230px;height:230px;background:var(--sheet);border:1px solid var(--rule);border-radius:6px}
+.field-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.4}
 
 /* ---------- exhaustive ---------- */
 #grid{display:grid;grid-template-columns:20px repeat(26,18px);gap:2px;font-family:var(--mono);font-size:11px;color:var(--muted)}
@@ -262,19 +280,43 @@ body.static .slide{transition:none}
 <div id="stage">
 
 <!-- ======================= 0 · TITLE ======================= -->
-<section class="slide" id="s-title" data-notes="Welcome. Today: why testing AI agents is a fundamentally different problem from testing ordinary software, and how we make it tractable. We'll go from a two-parameter function all the way to a live CLI run.">
-  <div class="runhead"><span><b>autoassure</b> · a short lecture on agent assurance</span><span>§ 0</span></div>
+<section class="slide" id="s-exec" data-notes="Executive summary. autoassure is a CLI tool that evaluates the AI agents in a codebase. You run it in the repo and it finds the AI components itself, whatever the system is: a single CV reviewer or a multi-agent legal pipeline. What makes it different is the test cases it generates. You can tell a natural-language agent almost anything, so there's no fixed list of inputs to check. The generated tests have to be non-repetitive, efficient, and still reach as many edge cases as possible. The rest of the talk explains how.">
+  <div class="runhead"><span><b>autoassure</b> · executive summary</span><span>§ 0</span></div>
   <div class="body">
-    <svg id="title-field" viewBox="0 0 560 560" aria-hidden="true"></svg>
-    <div class="kicker">Asymptotic Agent Evaluation</div>
-    <script type="text/markdown">
-      # Evaluating AI, confidently
-    </script>
-    <div class="sub">How do you gain assurance over a system whose input space is effectively infinite?</div>
-    <div class="meta">
-      <span><b>pip install autoassure</b></span>
-      <span>Python module · CLI</span>
-      <span>Press <b>→</b> to begin</span>
+    <div class="col" style="flex:1">
+      <div class="kicker">Executive summary</div>
+      <script type="text/markdown">
+        # Evaluating AI agents, confidently
+      </script>
+      <div class="lead"><b>autoassure</b> is a CLI tool that evaluates the AI agents inside your codebase.</div>
+      <div class="pts">
+        <div><span class="n">01</span><div><b>Finds the AI on its own</b><p>Run it in a repo and it locates the AI components automatically: prompts, tools, model calls and how they connect.</p></div></div>
+        <div><span class="n">02</span><div><b>Works on any AI system</b><p>From a single agent to a full pipeline.</p>
+          <span class="chip">CV reviewer</span><span class="chip">multi-agent legal AI pipeline</span><span class="chip">code reviewer</span></div></div>
+      </div>
+      <div class="meta">
+        <span><b>pip install autoassure</b></span>
+        <span>CLI · Python module</span>
+        <span>Press <b>→</b> to begin</span>
+      </div>
+    </div>
+    <div class="col" style="flex:1.05">
+      <div class="diff">
+        <div class="kicker">What makes it different</div>
+        <h3>It writes the test cases for you</h3>
+        <p>You can tell a natural-language agent almost anything, so there is no finite list of inputs to check. The tests autoassure generates are:</p>
+        <div class="diff-row">
+          <div class="props3">
+            <div><b>Non-repetitive</b><span>Each test covers a combination no earlier test has, so no budget goes on near-duplicates.</span></div>
+            <div><b>Efficient</b><span>Hundreds of tests instead of an input space too large to enumerate.</span></div>
+            <div><b>Edge-case seeking</b><span>Spread evenly over the whole space, then concentrated where the agent starts to fail.</span></div>
+          </div>
+          <div class="field-wrap">
+            <svg id="title-field" viewBox="0 0 560 560" aria-hidden="true"></svg>
+            <div class="field-cap">256 generated tests, evenly spread.<br>Red: a region where the agent fails.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -720,7 +762,7 @@ const redraws=[];function redrawAll(){redraws.forEach(f=>f())}
 (function(){
   const s=$('#title-field');
   function draw(){s.innerHTML='';for(let i=1;i<=256;i++){const[x,y]=sobol2(i);const inside=Math.hypot(x-.62,y-.55)<.28;
-    svgEl('circle',{cx:20+x*520,cy:20+y*520,r:inside?3.2:2.2,fill:inside?cssVar('--accent'):cssVar('--faint'),'fill-opacity':inside?.85:.45},s)}}
+    svgEl('circle',{cx:20+x*520,cy:20+y*520,r:inside?9:6.5,fill:inside?cssVar('--accent'):cssVar('--faint'),'fill-opacity':inside?.9:.6},s)}}
   draw();redraws.push(draw);
 })();
 
